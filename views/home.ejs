@@ -1,0 +1,30 @@
+<%- include("partials/second-header") -%>
+    <title>Daily Journal | Home</title>
+</head>
+<body class="carry">
+    <%- include("partials/headers") -%>
+    <div class="body">
+    <p class="title">
+        <%= titletype%>
+    </p>
+    <p>
+   <%= firsthome %>
+    </p>
+    
+    </div>
+    <div class="body">
+            <% glo.forEach( function(element){ %>
+             <p class="title">    <%= element.coTitle %> </p>
+             <p>  <%= element.coBody.substring(0, 100) + "..." %> <a href="/posts/<%= element.coTitle %>" style="  color:#050a52;
+                text-decoration: none;
+                text-transform: none;">Read More</a> </p>
+           <% } ) %>
+        </div>
+
+    <%- include("partials/footers") -%>
+
+     <% glo.forEach( function(element){ %>
+    <% } ) %>
+   
+
+

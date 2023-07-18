@@ -1,0 +1,28 @@
+<%- include("partials/second-header") -%>
+    <title>Daily Journal | Compose</title>
+</head>
+<body class="carry">
+   
+    
+        <%- include("partials/headers") -%>
+        <div class="body">
+        <p class="title">
+            <%=compact %>
+        </p>
+        <form action="/compose" method="POST">
+            <input type="text" name="composetitle" class="container-fluid">
+            <b class="title2">
+            <%=compactplayer %>
+            </b>
+            <p>
+            <!-- <input type="textarea" name="composebody" class="container-fluid" rows="4"> -->
+            <textarea name="composebody" id="composebody" rows="7" class="container-fluid"></textarea>
+           </p>
+            <p>
+            <button type="submit" name="submission" class="butt">Publish</button>
+            </p>
+        </form>
+        </div>
+    
+        <%- include("partials/footers") -%>
+        
