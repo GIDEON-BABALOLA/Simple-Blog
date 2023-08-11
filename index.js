@@ -3,14 +3,30 @@ const bodyParser = require("body-parser");
 const _ = require("lodash");
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
+const mongoose = require("mongoose");
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
-const global = []; //Global variables have to be declared outside all of the functions in a page
+mongoose.connect("mongodb://127.0.0.1:27017/sinpleBlogDB", {
+useNewUrlParser: true,
+useUnifiedTopology:true }
+)
+const blogSchema = new mongoose.Schema({
+    title : String,
+    content : String,
+    timestamp: { type: Date, default: Date.now }
+})
+const blogModel = mongoose.model("simpleBlog", blogSchema)
+ //Global variables have to be declared outside all of the functions in a page
 app.get("/", function( request, response){
     const home = "HOME";
     const homeContent = "At Folben Coorporation we bridge the knowledge gap in between digital technology and and industries such as banking, agriculture, healthcare, logistics and transportation with the help of highly qualified scientists, engineers, designers and other fields such as finance and business administration.Other companies under FOLBEN COORPORATION includes SmartBank, Agrosoft, Folben-Xpress and Folben Healthcare.";
-    response.render("home", { titletype : home, firsthome: homeContent, glo : global,});
-    // console.log(global);
+blogModel.find().sort({ timestamp: -1 })
+.then((data)=>{
+    response.render("home", { titletype : home, firsthome: homeContent, glo : data,});
+})
+.catch((error)=>{
+    console.log("Error in finding blog content data")
+})  // console.log(global);
 });
 app.get("/contact-us", function( request, response){
     const contact = "CONTACT US";
@@ -28,27 +44,25 @@ const composered = "Post"
 response.render("compose", { compact : composer, compactplayer : composered});
 });
 app.get("/posts/:value", (request, response) => {
-    const loader = _.lowerCase(global[0].coTitle)
-    const loadman = _.replace(loader, /\s+/g, '-');
-    console.log(request.params.value); //TEST
+    const originalString = request.url
+    const loadman = _.replace(originalString, '/posts/', '');
     console.log(loadman); //test
-    if(request.params.value === loadman){
-        response.render("post", { paper : global[0].coTitle, cement : global[0].coBody,});
-    }
-    else if(request.params.value === global[0].coTitle){
-        response.render("post", { paper : global[0].coTitle, cement : global[0].coBody,});
-    }
+    blogModel.find({_id : loadman})
+    .then((data)=>{
+response.render("post",{ paper: data[0].title, cement: data[0].content} )
+    })
+    .catch((error)=>{
+        console.log("Error in rendering each data")
+    })
 });
 app.post("/compose", (request, response)=> {
     const composed = request.body.composetitle;
     const composedbody = request.body.composebody;
-    // console.log(composedbody)
-    // console.log(composed);
-    const post = {
-        coTitle : composed,
-        coBody : composedbody
-    }
-    global.unshift(post);
+    const post = new blogModel({
+        title : composed,
+        content : composedbody
+    })
+    post.save()
     // you can also use global.push()
     //type rs to force nodemon to restart our servers
     response.redirect("/")

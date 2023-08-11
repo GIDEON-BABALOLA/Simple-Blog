@@ -14,8 +14,8 @@
     </div>
     <div class="body">
             <% glo.forEach( function(element){ %>
-             <p class="title">    <%= element.coTitle %> </p>
-             <p>  <%= element.coBody.substring(0, 100) + "..." %> <a href="/posts/<%= element.coTitle %>" style="  color:#050a52;
+             <p class="title">    <%= element.title %> </p>
+             <p>  <%= element.content.substring(0, 100) + "..." %> <a href="/posts/<%= element._id %>" style="  color:#050a52;
                 text-decoration: none;
                 text-transform: none;">Read More</a> </p>
            <% } ) %>
