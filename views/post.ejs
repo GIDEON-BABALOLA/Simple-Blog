@@ -9,6 +9,10 @@
              <div class="body">
              <text>  <%= cement %> </text>
         </div>
+        <form action="/delete" method="POST" style="text-align: end; margin-right: 5%;">
+            <button type="submit" class="btn btn-lg btn-dark" name="deletion" value= "<%= identify %>" > Delete</button>
+        
+        </form>
 
     <%- include("partials/footers") -%>
 

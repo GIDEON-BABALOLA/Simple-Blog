@@ -49,7 +49,7 @@ app.get("/posts/:value", (request, response) => {
     console.log(loadman); //test
     blogModel.find({_id : loadman})
     .then((data)=>{
-response.render("post",{ paper: data[0].title, cement: data[0].content} )
+response.render("post",{ paper: data[0].title, cement: data[0].content, identify : data[0]._id} )
     })
     .catch((error)=>{
         console.log("Error in rendering each data")
@@ -66,6 +66,18 @@ app.post("/compose", (request, response)=> {
     // you can also use global.push()
     //type rs to force nodemon to restart our servers
     response.redirect("/")
+})
+app.post("/delete", (request, response)=>{
+    console.log(request.body.deletion)
+    const deleteBlog = request.body.deletion;
+    blogModel.deleteOne({_id : deleteBlog})
+    .then((data)=>{
+        response.redirect("/")
+    })
+    .catch((error)=>{
+        console.log("Error in deleting one")
+    })
+
 })
 app.listen(7000, () => {
     console.log("server is running on port 7000");
